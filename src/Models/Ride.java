@@ -1,11 +1,13 @@
-class Ride {
-    String rideId;
-    Rider rider;
-    Driver driver;
-    boolean isActive;
-    int startX, startY;
-    int endX, endY;
-    int duration;
+package Models;
+
+public class Ride {
+    public String rideId;
+    public Rider rider;
+    public Driver driver;
+    public boolean isActive;
+    public int startX, startY;
+    public int endX, endY;
+    public int duration;
 
     public Ride(String rideId, Rider rider, Driver driver) {
         this.rideId = rideId;
@@ -23,4 +25,3 @@ class Ride {
         this.isActive = false;
     }
 }
-

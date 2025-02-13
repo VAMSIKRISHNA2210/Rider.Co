@@ -1,6 +1,11 @@
+package Services;
+
+import Models.Driver;
+import Models.Rider;
+import Models.Ride;
 import java.util.*;
 
-class RideService {
+public class RideService {
     private final Map<String, Driver> drivers = new HashMap<>();
     private final Map<String, Rider> riders = new HashMap<>();
     private final Map<String, Ride> rides = new HashMap<>();

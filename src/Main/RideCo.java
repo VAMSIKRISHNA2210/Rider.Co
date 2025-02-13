@@ -1,6 +1,9 @@
+package Main;
+
+import Services.RideService;
 import java.util.*;
 
-public class RideHailingApp {
+public class RideCo {
     private static final RideService rideService = new RideService();
 
     public static void main(String[] args) {
@@ -16,15 +19,14 @@ public class RideHailingApp {
                     rideService.addRider(command[1], Integer.parseInt(command[2]), Integer.parseInt(command[3]));
                     break;
                 case "MATCH":
-                    List<Driver> matchedDrivers = rideService.findNearestDrivers(command[1]);
+                    List<String> matchedDrivers = rideService.findNearestDrivers(command[1])
+                            .stream()
+                            .map(d -> d.id)
+                            .toList();
                     if (matchedDrivers.isEmpty()) {
                         System.out.println("NO_DRIVERS_AVAILABLE");
                     } else {
-                        System.out.print("DRIVERS_MATCHED");
-                        for (Driver driver : matchedDrivers) {
-                            System.out.print(" " + driver.id);
-                        }
-                        System.out.println();
+                        System.out.println("DRIVERS_MATCHED " + String.join(" ", matchedDrivers));
                     }
                     break;
                 case "START_RIDE":

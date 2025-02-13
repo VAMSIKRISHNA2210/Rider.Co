@@ -1,4 +1,8 @@
-class BillingService {
+package Services;
+
+import Models.Ride;
+
+public class BillingService {
     private static final double BASE_FARE = 50.0;
     private static final double PER_KM_RATE = 6.5;
     private static final double PER_MIN_RATE = 2.0;
@@ -10,4 +14,3 @@ class BillingService {
         return fare + (fare * TAX_RATE);
     }
 }
-
