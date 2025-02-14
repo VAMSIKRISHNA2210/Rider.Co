@@ -1,14 +1,19 @@
 package Main;
 
 import Services.RideService;
+
 import java.util.*;
 
+/**
+ * Main class to run the ride-sharing application.
+ */
 public class RideCo {
-    private static final RideService rideService = new RideService();
+    private static final RideService rideService = new RideService(); // Instance of RideService
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in); // Scanner for user input
 
+        // Process commands until there are no more lines
         while (scanner.hasNextLine()) {
             String[] command = scanner.nextLine().split(" ");
             switch (command[0]) {
