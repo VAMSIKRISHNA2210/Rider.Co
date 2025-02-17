@@ -6,122 +6,129 @@ import Models.Ride;
 
 import java.util.*;
 
-/**
- * Service class to manage rides, drivers, and riders in the ride-sharing application.
- */
 public class RideService {
-    private final Map<String, Driver> drivers = new HashMap<>(); // Map to store drivers
-    private final Map<String, Rider> riders = new HashMap<>(); // Map to store riders
-    private final Map<String, Ride> rides = new HashMap<>(); // Map to store rides
+    public final Map<String, Driver> drivers = new HashMap<>(); // Map of drivers
+    public final Map<String, Rider> riders = new HashMap<>(); // Map of riders
+    public final Map<String, Ride> rides = new HashMap<>(); // Map of rides
 
-    /**
-     * Adds a new driver to the service.
-     *
-     * @param id Unique identifier for the driver
-     * @param x  X-coordinate of the driver's location
-     * @param y  Y-coordinate of the driver's location
-     */
+    // Adds a new driver to the service
     public void addDriver(String id, int x, int y) {
         drivers.put(id, new Driver(id, x, y));
     }
 
-    /**
-     * Adds a new rider to the service.
-     *
-     * @param id Unique identifier for the rider
-     * @param x  X-coordinate of the rider's location
-     * @param y  Y-coordinate of the rider's location
-     */
+    // Adds a new rider to the service
     public void addRider(String id, int x, int y) {
         riders.put(id, new Rider(id, x, y));
     }
 
-    /**
-     * Finds the nearest available drivers to a given rider.
-     *
-     * @param riderId The ID of the rider
-     * @return A list of nearby available drivers
-     */
+    // Retrieves a rider by ID
+    public Rider getRider(String riderId) {
+        return riders.get(riderId);
+    }
+
+    // Finds the nearest available drivers to a rider
     public List<Driver> findNearestDrivers(String riderId) {
         Rider rider = riders.get(riderId);
         if (rider == null) {
-            return Collections.emptyList(); // Return empty list if rider not found
+            return Collections.emptyList();
         }
 
-        List<Driver> nearbyDrivers = new ArrayList<>();
+        // Lists to hold preferred and other drivers
+        List<Driver> preferredDrivers = new ArrayList<>();
+        List<Driver> otherDrivers = new ArrayList<>();
+
+        // Loop through all available drivers to find those near the rider
         for (Driver driver : drivers.values()) {
             double distance = driver.distanceTo(rider);
-            if (driver.isAvailable && distance <= 5.0) { // Include drivers exactly at 5km
-                nearbyDrivers.add(driver);
+            if (driver.isAvailable && distance <= 5.0) {
+                if (rider.isPreferredDriver(driver.id)) {
+                    preferredDrivers.add(driver);  // If the driver is a preferred driver for the rider, add to preferred list
+                } else {
+                    otherDrivers.add(driver);
+                }
             }
         }
 
-        // Sort drivers by distance and then by ID
-        nearbyDrivers.sort(Comparator
-                .comparingDouble((Driver d) -> d.distanceTo(rider))
-                .thenComparing(d -> d.id));
+        // Sort preferred drivers by distance to the rider
+        preferredDrivers.sort(Comparator.comparingDouble(d -> d.distanceTo(rider)));
+        // Sort other drivers by distance to the rider
+        otherDrivers.sort(Comparator.comparingDouble(d -> d.distanceTo(rider)));
 
-        return nearbyDrivers.subList(0, Math.min(5, nearbyDrivers.size())); // Return up to 5 nearest drivers
+        // Combine both lists: preferred drivers first, then others
+        List<Driver> sortedDrivers = new ArrayList<>(preferredDrivers);
+        sortedDrivers.addAll(otherDrivers);
+
+        // Return a sublist of up to 5 nearest drivers
+        return sortedDrivers.subList(0, Math.min(5, sortedDrivers.size()));
     }
 
-    /**
-     * Starts a ride for a given rider with a specified driver.
-     *
-     * @param rideId   Unique identifier for the ride
-     * @param n        The index of the driver to choose from the nearest drivers
-     * @param riderId  The ID of the rider
-     * @return True if the ride started successfully, false otherwise
-     */
+    // Starts a ride for a rider with a specified driver
     public boolean startRide(String rideId, int n, String riderId) {
         List<Driver> matchedDrivers = findNearestDrivers(riderId);
-        if (matchedDrivers.size() < n || rides.containsKey(rideId)) {
-            System.out.println("INVALID_RIDE");
-            return false; // Invalid ride if not enough drivers or ride already exists
+
+        // Check if no drivers are available
+        if (matchedDrivers.isEmpty()) {
+            System.out.println("NO_DRIVERS_AVAILABLE");
+            return false;
         }
 
+        // Check if requested driver index is valid or ride already exists
+        if (matchedDrivers.size() < n || rides.containsKey(rideId)) {
+            System.out.println("INVALID_RIDE");
+            return false;
+        }
+
+        // Select the driver based on the given index (n)
         Driver chosenDriver = matchedDrivers.get(n - 1);
-        chosenDriver.isAvailable = false; // Mark driver as unavailable
+        chosenDriver.isAvailable = false; // Mark the driver as unavailable
         Ride ride = new Ride(rideId, riders.get(riderId), chosenDriver);
-        rides.put(rideId, ride); // Store the ride
+        rides.put(rideId, ride); // Add the ride to the rides collection
         System.out.println("RIDE_STARTED " + rideId);
-        return true; // Ride started successfully
+        return true;
     }
 
-    /**
-     * Stops a ride and marks the driver as available again.
-     *
-     * @param rideId Unique identifier for the ride
-     * @param x      Ending X-coordinate of the ride
-     * @param y      Ending Y-coordinate of the ride
-     * @param duration Duration of the ride in minutes
-     * @return True if the ride stopped successfully, false otherwise
-     */
+    // Adds a driver to a rider's preferred list if eligible
+    public void preferDriver(String riderId, String driverId) {
+        Rider rider = riders.get(riderId);
+        Driver driver = drivers.get(driverId);
+
+        // Check if both rider and driver exist
+        if (rider != null && driver != null) {
+            double averageRating = driver.getAverageRating();
+            if (averageRating >= 4.0) {
+                rider.addPreferredDriver(driverId); // Add driver to preferred list
+                System.out.println("PREFERRED_DRIVER_ADDED " + driverId + " for " + riderId);
+            } else {
+                System.out.println("DRIVER_NOT_ELIGIBLE");
+            }
+        } else {
+            System.out.println("INVALID_PREFERENCE");
+        }
+    }
+
+    // Stops a ride and marks the driver as available
     public boolean stopRide(String rideId, int x, int y, int duration) {
         Ride ride = rides.get(rideId);
         if (ride == null || !ride.isActive) {
             System.out.println("INVALID_RIDE");
-            return false; // Invalid ride if not found or already completed
+            return false;
         }
 
-        ride.endRide(x, y, duration); // End the ride
-        ride.driver.isAvailable = true; // Mark driver as available
+        ride.endRide(x, y, duration);
+        ride.driver.isAvailable = true;
         System.out.println("RIDE_STOPPED " + rideId);
-        return true; // Ride stopped successfully
+        return true;
     }
 
-    /**
-     * Generates a bill for a completed ride.
-     *
-     * @param rideId Unique identifier for the ride
-     */
+    // Generates a bill for a completed ride
     public void generateBill(String rideId) {
         Ride ride = rides.get(rideId);
         if (ride == null || ride.isActive) {
             System.out.println("INVALID_RIDE");
-            return; // Invalid ride if not found or still active
+            return;
         }
 
-        double fare = BillingService.calculateFare(ride); // Calculate fare
-        System.out.printf("BILL %s %s %.2f%n", rideId, ride.driver.id, fare); // Print bill
+        double fare = BillingService.calculateFare(ride);
+        System.out.printf("BILL %s %s %.2f%n", rideId, ride.driver.id, fare);
     }
 }
