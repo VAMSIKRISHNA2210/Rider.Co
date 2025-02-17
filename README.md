@@ -25,20 +25,16 @@
 - **JUnit**: A testing framework used for unit testing the application.
 
 ## Project Structure
-📂 project_root
- ├── 📂 src
- │    ├── 📂 models
+📂 project_root\
+ ├── 📂 src\
+ │    ├── 📂 models\
  │    │    ├── Driver.java        
  │    │    ├── Rider.java         
- │    │    ├── Ride.java          
- │    │
- │    ├── 📂 services
- │    │    ├── RideService.java   
- │    │    ├── BillingService.java 
- │    │
- │    ├── 📂 main
- │    │    ├── RideCo.java
- │
+ │    │    ├── Ride.java\
+ │    ├── 📂 services\
+ │    │    ├── RideService.java\
+ │    ├── 📂 main\
+ │    │    ├── RideCo.java\
  ├── 📂 tests                    
  │    ├── RideCoTest.java         
 
