@@ -9,11 +9,6 @@
   - [Models](#models)
   - [Services](#services)
   - [Main Application](#main-application)
-  - [Testing](#testing)
-- [Usage](#usage)
-- [Testing](#testing-1)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 
@@ -30,7 +25,22 @@
 - **JUnit**: A testing framework used for unit testing the application.
 
 ## Project Structure
-. ├── Models │ ├── Driver.java │ ├── Rider.java │ └── Ride.java ├── Services │ ├── BillingService.java │ └── RideService.java ├── Main │ └── RideCo.java └── RideCoTest.java
+📂 project_root
+ ├── 📂 src
+ │    ├── 📂 models
+ │    │    ├── Driver.java        
+ │    │    ├── Rider.java         
+ │    │    ├── Ride.java          
+ │    │
+ │    ├── 📂 services
+ │    │    ├── RideService.java   
+ │    │    ├── BillingService.java 
+ │    │
+ │    ├── 📂 main
+ │    │    ├── RideCo.java
+ │
+ ├── 📂 tests                    
+ │    ├── RideCoTest.java         
 
 
 - **Models**: Contains the core classes representing the entities in the application.
