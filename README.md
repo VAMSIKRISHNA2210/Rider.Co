@@ -1,4 +1,4 @@
-# RideCo - Ride-Sharing Application
+# RideCo
 
 ## Table of Contents
 
