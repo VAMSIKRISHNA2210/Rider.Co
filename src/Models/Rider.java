@@ -24,9 +24,4 @@ public class Rider {
     public boolean isPreferredDriver(String driverId) {
         return preferredDrivers.contains(driverId);
     }
-
-    // Returns the set of preferred drivers
-    public Set<String> getPreferredDrivers() {
-        return preferredDrivers;
-    }
 }

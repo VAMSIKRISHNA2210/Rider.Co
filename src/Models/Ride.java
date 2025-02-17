@@ -42,3 +42,4 @@ public class Ride {
         this.isActive = false; // Mark the ride as completed
     }
 }
+
