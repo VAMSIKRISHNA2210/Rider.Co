@@ -9,6 +9,9 @@
   - [Models](#models)
   - [Services](#services)
   - [Main Application](#main-application)
+- [Usage](#usage)
+- [Testing](#testing)
+
 
 ## Features
 
@@ -99,3 +102,31 @@
   - The main class that runs the application, processes user commands, and interacts with the `RideService`.
   - Commands include adding drivers and riders, matching drivers, starting and stopping rides, and generating bills.
 
+## Usage
+
+1. **Clone the repository**:
+
+   ```bash
+
+   git clone https://github.com/yourusername/RideCo.git
+
+   cd RideCo
+2. **Compile the Java files**:
+   ```bash
+   
+    javac -d . Models/*.java Services/*.java Main/*.java
+
+3. **Run the application**:
+
+```bash
+    java Main.RideCo
+
+## Testing
+
+To run the unit tests, ensure you have JUnit in your classpath. You can run the tests using the following command:
+```bash
+
+   javac -cp .:junit-platform-console-standalone-1.8.2.jar RideCoTest.java
+   java -cp .:junit-platform-console-standalone-1.8.2.jar org.junit.platform.console.ConsoleLauncher --scan-classpath
+
+Make sure to replace junit-platform-console-standalone-1.8.2.jar with the actual path to the JUnit jar file.
