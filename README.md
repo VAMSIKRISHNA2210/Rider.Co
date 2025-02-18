@@ -107,7 +107,7 @@
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/VAMSIKRISHNA221O/RideCo.git
+   git clone https://github.com/VAMSIKRISHNA221O/Ride.Co.git
    cd RideCo
 2. **Compile the Java files**:
    ```bash
