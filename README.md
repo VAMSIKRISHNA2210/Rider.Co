@@ -111,8 +111,8 @@
    cd RideCo
 2. **Compile the Java files**:
    ```bash
-   javac -d . Models/*.java Services/*.java Main/*.java
-
+   javac -d . Main/*.java Models/*.java Services/*.java
+   cd src
 3. **Run the application**:
 
    ```bash
