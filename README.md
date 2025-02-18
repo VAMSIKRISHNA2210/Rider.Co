@@ -125,5 +125,5 @@ To run the unit tests, ensure you have JUnit in your classpath. You can run the 
    ```bash
    javac -cp .:junit-platform-console-standalone-1.8.2.jar RideCoTest.java
    java -cp .:junit-platform-console-standalone-1.8.2.jar org.junit.platform.console.ConsoleLauncher --scan-classpath
-    ```
+   ```
 Make sure to replace junit-platform-console-standalone-1.8.2.jar with the actual path to the JUnit jar file.
